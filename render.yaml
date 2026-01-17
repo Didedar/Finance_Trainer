@@ -1,0 +1,46 @@
+# Render Blueprint for Finance Trainer
+# Deploy both frontend and backend
+
+services:
+  # Backend API - Python FastAPI
+  - type: web
+    name: finance-trainer-api
+    runtime: python
+    region: frankfurt
+    plan: free
+    buildCommand: |
+      cd backend && pip install -r requirements.txt
+    startCommand: |
+      cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./finance_trainer.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: CORS_ORIGINS
+        value: https://finance-trainer.onrender.com
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+  # Frontend - Static Site (Vite React)
+  - type: web
+    name: finance-trainer
+    runtime: static
+    region: frankfurt
+    plan: free
+    buildCommand: |
+      cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://finance-trainer-api.onrender.com/api

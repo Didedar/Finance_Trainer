@@ -1,0 +1,485 @@
+@import "tailwindcss";
+
+/* Premium Design System - HSL Color Palette */
+:root {
+  /* Primary Brand: Rich Royal Blue */
+  --primary: 220 70% 50%;
+  /* #2663eb */
+  --primary-foreground: 210 40% 98%;
+
+  /* Secondary/Accent: Vibrant Cyan/Teal for gradients */
+  --secondary: 180 70% 45%;
+  --secondary-foreground: 210 40% 98%;
+
+  /* Backgrounds: Deep, sophisticated darks or clean lights */
+  /* Using a very subtle off-white for light mode */
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+
+  /* Card/Surface Colors */
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  /* UI Elements */
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 220 70% 50%;
+
+  /* Status Colors */
+  --success: 142 76% 36%;
+  --warning: 38 92% 50%;
+  --destructive: 0 84% 60%;
+
+  /* Spacing & Layout */
+  --radius: 1rem;
+  --header-height: 80px;
+}
+
+/* Base Reset & Typography */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+
+  /* Premium Card with Glassmorphism option */
+  .card {
+    @apply rounded-[var(--radius)] border border-[hsl(var(--border))] bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))];
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  }
+
+  /* Glass Card Variant */
+  .card-glass {
+    @apply rounded-[var(--radius)] border border-white/20 bg-white/70 backdrop-blur-xl;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  }
+
+  /* Gradient Text */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--secondary))];
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] shadow-lg shadow-blue-500/20 hover:bg-[hsl(var(--primary))]/90 hover:shadow-blue-500/30 hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-[hsl(var(--foreground))] border border-[hsl(var(--border))] hover:bg-[hsl(var(--background))] hover:text-[hsl(var(--primary))];
+  }
+
+  .btn-glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20;
+  }
+
+  /* Inputs */
+  .input-field {
+    @apply flex h-12 w-full rounded-lg border border-[hsl(var(--border))] bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--ring))] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200;
+  }
+
+  .input-field:focus {
+    @apply border-[hsl(var(--primary))];
+    box-shadow: 0 0 0 4px rgba(38, 99, 235, 0.1);
+  }
+
+  /* Layout Utilities */
+  .container-custom {
+    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+  }
+}
+
+/* Custom Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Scrollbar Polish */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* Flashcard Flip Animation */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Fade In Animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Prose/Typography Improvements for Lesson Content */
+.prose h2 {
+  @apply text-2xl font-bold text-gray-900 mt-8 mb-4 pb-2 border-b border-gray-200;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold text-gray-800 mt-6 mb-3;
+}
+
+.prose p {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+
+.prose ul,
+.prose ol {
+  @apply my-4 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose strong {
+  @apply text-blue-600 font-semibold;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 italic text-gray-700;
+}
+
+/* ============================================
+   LIQUID LOADER ANIMATION
+   Premium morphing blob with gradient effects
+   ============================================ */
+
+/* Liquid blob morphing animation */
+@keyframes liquid-morph {
+
+  0%,
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg) scale(1);
+  }
+
+  25% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(90deg) scale(1.05);
+  }
+
+  50% {
+    border-radius: 50% 60% 30% 60% / 30% 70% 50% 60%;
+    transform: rotate(180deg) scale(1);
+  }
+
+  75% {
+    border-radius: 60% 40% 60% 30% / 70% 30% 50% 40%;
+    transform: rotate(270deg) scale(1.05);
+  }
+}
+
+/* Gradient color shifting */
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Pulsing glow effect */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(38, 99, 235, 0.4),
+      0 0 40px rgba(6, 182, 212, 0.2),
+      0 0 60px rgba(139, 92, 246, 0.1);
+    filter: brightness(1);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px rgba(38, 99, 235, 0.6),
+      0 0 60px rgba(6, 182, 212, 0.4),
+      0 0 90px rgba(139, 92, 246, 0.2);
+    filter: brightness(1.1);
+  }
+}
+
+/* Text shimmer effect */
+@keyframes text-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Liquid loader container */
+.liquid-loader {
+  @apply flex flex-col items-center justify-center gap-6;
+}
+
+/* Liquid blob */
+.liquid-blob {
+  position: relative;
+  background: linear-gradient(135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--secondary)) 50%,
+      #8b5cf6 100%);
+  background-size: 200% 200%;
+  animation:
+    liquid-morph 8s ease-in-out infinite,
+    gradient-shift 4s ease-in-out infinite,
+    pulse-glow 2s ease-in-out infinite;
+}
+
+.liquid-blob--sm {
+  width: 48px;
+  height: 48px;
+}
+
+.liquid-blob--md {
+  width: 80px;
+  height: 80px;
+}
+
+.liquid-blob--lg {
+  width: 120px;
+  height: 120px;
+}
+
+/* Inner glow element */
+.liquid-blob::before {
+  content: '';
+  position: absolute;
+  inset: 15%;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.2) 100%);
+  border-radius: inherit;
+  filter: blur(10px);
+  animation: liquid-morph 8s ease-in-out infinite reverse;
+}
+
+/* Loading text with shimmer */
+.liquid-text {
+  @apply text-lg font-medium;
+  background: linear-gradient(90deg,
+      hsl(var(--foreground)) 0%,
+      hsl(var(--primary)) 25%,
+      hsl(var(--secondary)) 50%,
+      hsl(var(--primary)) 75%,
+      hsl(var(--foreground)) 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
+
+/* Subtext style */
+.liquid-subtext {
+  @apply text-sm text-gray-400 opacity-80;
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Orbiting dots */
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(50px) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(50px) rotate(-360deg);
+  }
+}
+
+.liquid-orbit {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: hsl(var(--primary));
+  border-radius: 50%;
+  animation: orbit 3s linear infinite;
+  box-shadow: 0 0 10px hsl(var(--primary));
+}
+
+.liquid-orbit--2 {
+  animation-delay: -1s;
+  background: hsl(var(--secondary));
+  box-shadow: 0 0 10px hsl(var(--secondary));
+}
+
+.liquid-orbit--3 {
+  animation-delay: -2s;
+  background: #8b5cf6;
+  box-shadow: 0 0 10px #8b5cf6;
+}
+
+/* ============================================
+   TOAST NOTIFICATION ANIMATIONS
+   ============================================ */
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right 0.3s ease-in forwards;
+}
+
+/* XP celebration animation */
+@keyframes xp-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-xp-pop {
+  animation: xp-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
