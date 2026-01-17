@@ -16,7 +16,7 @@ services:
       - key: GEMINI_API_KEY
         sync: false 
       - key: CORS_ORIGINS
-        value: https://finance-trainer.onrender.com
+        value: https://finance-trainer.onrender.com,https://finance-trainer-xxxx.onrender.com
       - key: PYTHON_VERSION
         value: 3.11.0
         
