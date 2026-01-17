@@ -1,8 +1,4 @@
-# Render Blueprint for Finance Trainer
-# Deploy both frontend and backend
-
 services:
-  # Backend API - Python FastAPI
   - type: web
     name: finance-trainer-api
     runtime: python
@@ -18,17 +14,15 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: GEMINI_API_KEY
-        sync: false  # Set manually in Render dashboard
+        sync: false 
       - key: CORS_ORIGINS
         value: https://finance-trainer.onrender.com
       - key: PYTHON_VERSION
         value: 3.11.0
-
-  # Frontend - Static Site (Vite React)
+        
   - type: web
     name: finance-trainer
     runtime: static
-    region: frankfurt
     plan: free
     buildCommand: |
       cd frontend && npm install && npm run build
