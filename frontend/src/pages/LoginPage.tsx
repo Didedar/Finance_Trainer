@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
             }
 
             const result = await response.json();
-            login(result.access_token, result.refresh_token);
+            await login(result.access_token, result.refresh_token);
             navigate('/app/dashboard');
         } catch (error) {
             setError('root', {
