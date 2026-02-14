@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { client } from '../api/client';
-import { Flame, Shield, TrendingDown, Skull, AlertTriangle, Coins, Swords, Trophy } from 'lucide-react';
+import { Flame, Shield, TrendingDown, Skull, AlertTriangle, Swords, Trophy } from 'lucide-react';
 
 interface BossTurn {
     battle_id: number;
