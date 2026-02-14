@@ -5,7 +5,7 @@ import logging
 from .config import get_settings
 from .database import engine, Base
 from .api import api_router
-from .models import User, Lesson, LessonContent, UserProgress, UserStats
+from .models import User, Lesson, LessonContent, UserProgress, UserStats, ChatMessage, RegeneratedContent, DictionaryCache
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

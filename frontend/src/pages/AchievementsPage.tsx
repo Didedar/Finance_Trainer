@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { client } from '../api/client';
+import { CheckCircle, Lock, Trophy } from 'lucide-react';
 
 const TITLES = [
     { xp: 0, name: "Novice", desc: "You are just starting your journey." },
@@ -21,7 +22,12 @@ export const AchievementsPage: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
             <div className="text-center mb-12">
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">Achievements & Titles</h1>
+                <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="p-3 bg-blue-100 rounded-full text-blue-600">
+                        <Trophy className="w-8 h-8" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-gray-900">Achievements & Titles</h1>
+                </div>
                 <div className="inline-block bg-white px-6 py-3 rounded-full border border-gray-200 shadow-sm">
                     <span className="text-gray-500 mr-2">Your Current XP:</span>
                     <span className="text-2xl font-bold text-blue-600">{currentXP}</span>
@@ -51,13 +57,9 @@ export const AchievementsPage: React.FC = () => {
                                     }`}
                                 >
                                     {isUnlocked ? (
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
+                                        <CheckCircle className="w-6 h-6" />
                                     ) : (
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                        </svg>
+                                        <Lock className="w-6 h-6" />
                                     )}
                                 </div>
 
@@ -76,7 +78,7 @@ export const AchievementsPage: React.FC = () => {
                                             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                                                 <div
                                                     className="h-full bg-blue-500 rounded-full"
-                                                    style={{ width: `${(currentXP / title.xp) * 100}%` }}
+                                                    style={{ width: `${Math.min((currentXP / title.xp) * 100, 100)}%` }}
                                                 ></div>
                                             </div>
                                         </div>

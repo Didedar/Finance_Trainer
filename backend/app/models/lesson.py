@@ -12,6 +12,8 @@ class Lesson(Base):
     lesson_number = Column(Integer, nullable=False)
     title = Column(String(255), nullable=False)
     topic_key = Column(String(100), unique=True, index=True, nullable=False)
+    quest_emoji = Column(String(8), nullable=True)
+    quest_hook = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     content = relationship("LessonContent", back_populates="lesson", uselist=False, cascade="all, delete-orphan")

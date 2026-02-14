@@ -19,6 +19,12 @@ import { DashboardPage } from './pages/DashboardPage'
 import { LecturesPage } from './pages/LecturesPage'
 import { AchievementsPage } from './pages/AchievementsPage'
 import { LessonPage } from './pages/LessonPage'
+import { DuelsPage } from './pages/DuelsPage'
+import { BudgetSimPage } from './pages/BudgetSimPage'
+import { TrapsPage } from './pages/TrapsPage'
+import { HabitsPage } from './pages/HabitsPage'
+import { ProfilePage } from './pages/ProfilePage'
+import { BossFightPage } from './pages/BossFightPage'
 
 const MainLayout = ({ children, showFooter = true }: { children: React.ReactNode; showFooter?: boolean }) => (
   <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans">
@@ -48,6 +54,12 @@ createRoot(document.getElementById('root')!).render(
             <Route path="lectures" element={<LecturesPage />} />
             <Route path="achievements" element={<AchievementsPage />} />
             <Route path="lessons/:id" element={<LessonPage />} />
+            <Route path="duels" element={<DuelsPage />} />
+            <Route path="budget-sim" element={<BudgetSimPage />} />
+            <Route path="traps" element={<TrapsPage />} />
+            <Route path="habits" element={<HabitsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="boss" element={<BossFightPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

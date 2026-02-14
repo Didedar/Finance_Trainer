@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { client } from '../api/client';
 import { LiquidLoader } from '../components/ui/LiquidLoader';
+import { ProgressTotem } from '../three/ProgressTotem';
+import { PiggyBank } from '../three/PiggyBank';
+import {
+    Zap, Flame, BookOpen, TrendingUp, Lock, ChevronRight,
+    Calendar, Award, Trophy
+} from 'lucide-react';
 
 const TITLE_TRANSLATIONS: { [key: string]: string } = {
     'Новичок': 'Novice',
@@ -57,6 +63,9 @@ export const DashboardPage: React.FC = () => {
                     <p className="text-gray-500 text-lg">Ready to master your finances today?</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white p-2 pr-6 rounded-full shadow-sm border border-gray-100">
+                    <div className="p-2 bg-blue-50 rounded-full">
+                        <Trophy className="w-6 h-6 text-blue-600" />
+                    </div>
                     <div>
                         <div className="text-xs text-gray-400 uppercase tracking-wider font-bold">Current Title</div>
                         <div className="text-lg font-bold text-blue-600">{getEnglishTitle(summary?.current_title || 'Novice')}</div>
@@ -71,7 +80,7 @@ export const DashboardPage: React.FC = () => {
 
                     <div className="relative z-10">
                         <div className="text-blue-100 text-sm font-medium mb-1 flex items-center gap-2">
-                            Total XP
+                            <Zap className="w-4 h-4" /> Total XP
                         </div>
                         <div className="text-4xl font-bold mb-4">{summary?.total_xp || 0}</div>
                         <div className="h-1.5 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
@@ -87,9 +96,11 @@ export const DashboardPage: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="card p-6 flex flex-col justify-between">
+                <div className="card p-6 flex flex-col justify-between group hover:shadow-md transition-shadow">
                     <div>
-                        <div className="text-gray-500 text-sm font-medium mb-1">Day Streak</div>
+                        <div className="text-gray-500 text-sm font-medium mb-1 flex items-center gap-2">
+                            <Flame className="w-4 h-4 text-orange-500" /> Day Streak
+                        </div>
                         <div className="text-4xl font-bold mb-1 flex items-center gap-2">
                             {summary?.streak_days || 0}
                         </div>
@@ -99,9 +110,11 @@ export const DashboardPage: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="card p-6 flex flex-col justify-between">
+                <div className="card p-6 flex flex-col justify-between group hover:shadow-md transition-shadow">
                     <div>
-                        <div className="text-gray-500 text-sm font-medium mb-1">Lessons Completed</div>
+                        <div className="text-gray-500 text-sm font-medium mb-1 flex items-center gap-2">
+                            <BookOpen className="w-4 h-4 text-purple-500" /> Lessons Completed
+                        </div>
                         <div className="text-4xl font-bold mb-1">
                             {summary?.lessons_completed || 0}
                             <span className="text-xl text-gray-300 font-normal ml-2">/ 75</span>
@@ -112,9 +125,11 @@ export const DashboardPage: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="card p-6 flex flex-col justify-between">
+                <div className="card p-6 flex flex-col justify-between group hover:shadow-md transition-shadow">
                     <div>
-                        <div className="text-gray-500 text-sm font-medium mb-1">Current Level</div>
+                        <div className="text-gray-500 text-sm font-medium mb-1 flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-green-500" /> Current Level
+                        </div>
                         <div className="text-4xl font-bold mb-1 text-gradient">
                             Level {summary?.level_progress?.find((l: any) => l.progress_percent < 100)?.level || 1}
                         </div>
@@ -122,6 +137,22 @@ export const DashboardPage: React.FC = () => {
                     <p className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block w-max font-medium mt-4">
                         Intermediate
                     </p>
+                </div>
+            </div>
+
+            {/* 3D Visualizations */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="card p-5">
+                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Progress Totem</h3>
+                    <Suspense fallback={<div className="h-48 flex items-center justify-center text-gray-400 text-sm">Loading 3D...</div>}>
+                        <ProgressTotem totalXP={summary?.total_xp || 0} />
+                    </Suspense>
+                </div>
+                <div className="card p-5">
+                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">XP Piggy Bank</h3>
+                    <Suspense fallback={<div className="h-48 flex items-center justify-center text-gray-400 text-sm">Loading 3D...</div>}>
+                        <PiggyBank totalXP={summary?.total_xp || 0} />
+                    </Suspense>
                 </div>
             </div>
 
@@ -144,9 +175,7 @@ export const DashboardPage: React.FC = () => {
                                             'bg-blue-100 text-blue-600'}`}
                                 >
                                     {level.is_locked ? (
-                                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                        </svg>
+                                        <Lock className="w-6 h-6" />
                                     ) : level.level}
                                 </div>
                                 <div className="flex-1">
@@ -169,9 +198,7 @@ export const DashboardPage: React.FC = () => {
                                 </div>
                                 {!level.is_locked && (
                                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
+                                        <ChevronRight className="w-5 h-5 text-gray-400" />
                                     </div>
                                 )}
                             </div>
@@ -190,11 +217,11 @@ export const DashboardPage: React.FC = () => {
                                         <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-blue-100 border-2 border-white ring-1 ring-blue-500/20"></div>
                                         <div>
                                             <div className="font-semibold text-gray-900 leading-none mb-1">{activity.lesson_title}</div>
-                                            <div className="text-xs text-gray-400 mb-2">
-                                                {new Date(activity.completed_at).toLocaleDateString()}
+                                            <div className="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                                                <Calendar className="w-3 h-3" /> {new Date(activity.completed_at).toLocaleDateString()}
                                             </div>
                                             <div className="inline-flex items-center px-2 py-1 rounded bg-green-50 text-green-700 text-xs font-medium">
-                                                +{activity.xp_earned} XP
+                                                <Award className="w-3 h-3 mr-1" /> +{activity.xp_earned} XP
                                             </div>
                                         </div>
                                     </div>

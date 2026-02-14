@@ -28,6 +28,8 @@ class LessonResponse(BaseModel):
     lesson_number: int
     title: str
     topic_key: str
+    quest_emoji: Optional[str] = None
+    quest_hook: Optional[str] = None
     has_content: bool = False
     is_completed: bool = False
     

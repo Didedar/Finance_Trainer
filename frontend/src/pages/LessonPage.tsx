@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { marked } from 'marked';
 import { Card } from '../components/ui/Card';
@@ -7,6 +7,11 @@ import { Modal } from '../components/ui/Modal';
 import { LiquidLoader } from '../components/ui/LiquidLoader';
 import { XPToast } from '../components/ui/Toast';
 import { client } from '../api/client';
+import { CoachChat } from '../components/ai/CoachChat';
+import { RegeneratePanel } from '../components/ai/RegeneratePanel';
+import { LifeExampleForm } from '../components/ai/LifeExampleForm';
+import { DictionaryPopover } from '../components/ai/DictionaryPopover';
+import { CalculatorWidgets } from '../components/tools/CalculatorWidgets';
 
 // Types
 interface LessonMeta {
@@ -16,6 +21,8 @@ interface LessonMeta {
     module: number;
     lesson_number: number;
     topic_key: string;
+    quest_emoji?: string;
+    quest_hook?: string;
     has_content: boolean;
     is_completed: boolean;
 }
@@ -63,6 +70,14 @@ export const LessonPage: React.FC = () => {
     const [isCompleting, setIsCompleting] = useState(false);
     const [xpEarned, setXpEarned] = useState<number | null>(null);
     const [showXpToast, setShowXpToast] = useState(false);
+
+    // AI feature states
+    const [showRegeneratePanel, setShowRegeneratePanel] = useState(false);
+    const [showLifeExample, setShowLifeExample] = useState(false);
+    const [originalContent, setOriginalContent] = useState<LessonContentData | null>(null);
+    const [quizErrors, setQuizErrors] = useState<string[]>([]);
+    const [showCalculators, setShowCalculators] = useState(false);
+    const lessonContentRef = useRef<HTMLDivElement>(null);
 
     // Markdown to HTML conversion
     const lessonHtml = useMemo(() => {
@@ -162,6 +177,31 @@ export const LessonPage: React.FC = () => {
         }
     };
 
+    // AI Regenerate: apply customized content
+    const handleRegenerateApply = (newContent: { lesson_text: string; flashcards: any[]; quiz: any[] }) => {
+        if (content && !originalContent) {
+            setOriginalContent({ ...content });
+        }
+        setContent({
+            ...content!,
+            lesson_text: newContent.lesson_text,
+            flashcards: newContent.flashcards,
+            quiz: newContent.quiz,
+        });
+        setQuizAnswers(new Array(newContent.quiz.length).fill(null));
+        setShowRegeneratePanel(false);
+        setCurrentStep('reading');
+    };
+
+    // AI Regenerate: rollback to original
+    const handleRevertToOriginal = () => {
+        if (originalContent) {
+            setContent(originalContent);
+            setQuizAnswers(new Array(originalContent.quiz.length).fill(null));
+            setOriginalContent(null);
+        }
+    };
+
     const handleNextFlashcard = () => {
         setIsFlashcardFlipped(false);
         if (content && currentFlashcardIndex < content.flashcards.length - 1) {
@@ -185,6 +225,13 @@ export const LessonPage: React.FC = () => {
         newAnswers[currentQuizIndex] = answerIndex;
         setQuizAnswers(newAnswers);
         setShowQuizExplanation(true);
+
+        // Track quiz errors for AI Coach context
+        if (content && answerIndex !== content.quiz[currentQuizIndex].correct_index) {
+            const q = content.quiz[currentQuizIndex];
+            const errorDesc = `Q: "${q.question}" — chose "${q.options[answerIndex]}" instead of "${q.options[q.correct_index]}"`;
+            setQuizErrors(prev => [...prev, errorDesc]);
+        }
     };
 
     const handleNextQuizQuestion = () => {
@@ -276,20 +323,47 @@ export const LessonPage: React.FC = () => {
     const ReadingStep = () => (
         <div className="animate-fade-in">
             <Card className="mb-6">
-                <div className="flex justify-end mb-4">
+                <div className="flex justify-between items-center mb-4">
+                    <div className="flex gap-2">
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowLifeExample(true)}
+                            className="text-sm py-1 px-3"
+                        >
+                            📝 My Life Example
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setShowCalculators(true)}
+                            className="text-sm py-1 px-3"
+                        >
+                            🧮 Calculators
+                        </Button>
+                        {originalContent && (
+                            <Button
+                                variant="secondary"
+                                onClick={handleRevertToOriginal}
+                                className="text-sm py-1 px-3 !border-amber-200 text-amber-600 hover:!bg-amber-50"
+                            >
+                                ↩ Back to Original
+                            </Button>
+                        )}
+                    </div>
                     <Button
                         variant="secondary"
-                        onClick={() => setShowRegenerateModal(true)}
+                        onClick={() => setShowRegeneratePanel(true)}
                         className="text-sm py-1 px-3"
                         disabled={isLoading || isGenerating}
                     >
                         🔄 Regenerate (AI)
                     </Button>
                 </div>
-                <article
-                    className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-blue-600 prose-ul:my-4 prose-ol:my-4"
-                    dangerouslySetInnerHTML={{ __html: lessonHtml }}
-                />
+                <div ref={lessonContentRef}>
+                    <article
+                        className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-li:text-gray-700 prose-strong:text-blue-600 prose-ul:my-4 prose-ol:my-4"
+                        dangerouslySetInnerHTML={{ __html: lessonHtml }}
+                    />
+                </div>
             </Card>
             <div className="flex justify-center">
                 <Button
@@ -521,7 +595,13 @@ export const LessonPage: React.FC = () => {
                     </svg>
                 </button>
                 <div className="flex-1">
-                    <h1 className="text-2xl font-bold text-gray-900">{meta.title}</h1>
+                    <div className="flex items-center gap-2">
+                        {meta.quest_emoji && <span className="text-2xl">{meta.quest_emoji}</span>}
+                        <h1 className="text-2xl font-bold text-gray-900">{meta.title}</h1>
+                    </div>
+                    {meta.quest_hook && (
+                        <p className="text-sm text-indigo-600 font-medium mt-1 italic">{meta.quest_hook}</p>
+                    )}
                     <div className="flex items-center gap-3 mt-1">
                         <span className="text-sm text-gray-500">Level {meta.level} • Module {meta.module}</span>
                         {meta.is_completed && (
@@ -542,7 +622,7 @@ export const LessonPage: React.FC = () => {
             {currentStep === 'quiz' && <QuizStep />}
             {currentStep === 'results' && <ResultsStep />}
 
-            {/* Regeneration Modal */}
+            {/* Old Regeneration Modal (kept as fallback) */}
             <Modal
                 isOpen={showRegenerateModal}
                 onClose={() => setShowRegenerateModal(false)}
@@ -576,6 +656,45 @@ export const LessonPage: React.FC = () => {
                     </p>
                 </div>
             </Modal>
+
+            {/* AI Regenerate Panel */}
+            {showRegeneratePanel && (
+                <RegeneratePanel
+                    lessonId={meta.id}
+                    onApply={handleRegenerateApply}
+                    onClose={() => setShowRegeneratePanel(false)}
+                />
+            )}
+
+            {/* AI Life Example */}
+            {showLifeExample && (
+                <LifeExampleForm
+                    lessonId={meta.id}
+                    onClose={() => setShowLifeExample(false)}
+                />
+            )}
+
+            {/* AI Dictionary Popover (text selection) */}
+            {currentStep === 'reading' && (
+                <DictionaryPopover
+                    lessonId={meta.id}
+                    userLevel={meta.level}
+                    containerRef={lessonContentRef}
+                />
+            )}
+
+            {/* Financial Calculators */}
+            <CalculatorWidgets
+                isOpen={showCalculators}
+                onClose={() => setShowCalculators(false)}
+            />
+
+            {/* AI Coach Chat */}
+            <CoachChat
+                lessonId={meta.id}
+                userLevel={meta.level}
+                quizErrors={quizErrors}
+            />
 
             {/* XP Earned Toast */}
             {showXpToast && xpEarned && (

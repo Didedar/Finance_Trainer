@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { motion } from 'framer-motion';
+import { TrendingUp } from 'lucide-react';
 
 export const Header: React.FC = () => {
     const location = useLocation();
@@ -48,9 +49,7 @@ export const Header: React.FC = () => {
                     }`}>
                     <Link to="/" className="flex items-center gap-2 group mr-8">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-200">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                            </svg>
+                            <TrendingUp className="w-6 h-6" />
                         </div>
                         <span className={`font-bold text-xl tracking-tight transition-colors ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}>
                             Finance Trainer

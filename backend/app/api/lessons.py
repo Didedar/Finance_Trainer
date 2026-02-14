@@ -87,6 +87,8 @@ async def get_lessons(
                 lesson_number=lesson.lesson_number,
                 title=lesson.title,
                 topic_key=lesson.topic_key,
+                quest_emoji=lesson.quest_emoji,
+                quest_hook=lesson.quest_hook,
                 has_content=lesson.id in content_ids,
                 is_completed=progress_map.get(lesson.id, False)
             )
@@ -169,6 +171,8 @@ async def get_lesson(
         lesson_number=lesson.lesson_number,
         title=lesson.title,
         topic_key=lesson.topic_key,
+        quest_emoji=lesson.quest_emoji,
+        quest_hook=lesson.quest_hook,
         has_content=has_content,
         is_completed=is_completed
     )
