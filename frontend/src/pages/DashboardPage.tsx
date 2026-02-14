@@ -1,10 +1,9 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { client } from '../api/client';
 import { LiquidLoader } from '../components/ui/LiquidLoader';
-import { ProgressTotem } from '../three/ProgressTotem';
-import { PiggyBank } from '../three/PiggyBank';
+
 import {
     Zap, Flame, BookOpen, TrendingUp, Lock, ChevronRight,
     Calendar, Award, Trophy
@@ -140,21 +139,7 @@ export const DashboardPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* 3D Visualizations */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="card p-5">
-                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Progress Totem</h3>
-                    <Suspense fallback={<div className="h-48 flex items-center justify-center text-gray-400 text-sm">Loading 3D...</div>}>
-                        <ProgressTotem totalXP={summary?.total_xp || 0} />
-                    </Suspense>
-                </div>
-                <div className="card p-5">
-                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">XP Piggy Bank</h3>
-                    <Suspense fallback={<div className="h-48 flex items-center justify-center text-gray-400 text-sm">Loading 3D...</div>}>
-                        <PiggyBank totalXP={summary?.total_xp || 0} />
-                    </Suspense>
-                </div>
-            </div>
+
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Level Progress */}
