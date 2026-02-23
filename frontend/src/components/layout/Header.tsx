@@ -52,7 +52,7 @@ export const Header: React.FC = () => {
                             <TrendingUp className="w-6 h-6" />
                         </div>
                         <span className={`font-bold text-xl tracking-tight transition-colors ${scrolled ? 'text-gray-900' : 'text-gray-900'}`}>
-                            Finance Trainer
+                            CoinUp
                         </span>
                     </Link>
 

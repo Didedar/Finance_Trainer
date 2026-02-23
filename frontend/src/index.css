@@ -2,36 +2,35 @@
 
 /* Premium Design System - HSL Color Palette */
 :root {
-  /* Primary Brand: Rich Royal Blue */
-  --primary: 220 70% 50%;
-  /* #2663eb */
-  --primary-foreground: 210 40% 98%;
+  /* Primary Brand: Neon Purple */
+  --primary: 275 100% 60%;
+  /* #a855f7 or similar */
+  --primary-foreground: 0 0% 100%;
 
-  /* Secondary/Accent: Vibrant Cyan/Teal for gradients */
-  --secondary: 180 70% 45%;
-  --secondary-foreground: 210 40% 98%;
+  /* Secondary/Accent: Acid Green */
+  --secondary: 80 100% 50%;
+  --secondary-foreground: 0 0% 0%;
 
-  /* Backgrounds: Deep, sophisticated darks or clean lights */
-  /* Using a very subtle off-white for light mode */
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
+  /* Backgrounds: Deep Dark */
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
 
   /* Card/Surface Colors */
-  --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card: 240 5% 8%;
+  --card-foreground: 0 0% 98%;
 
   /* UI Elements */
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 220 70% 50%;
+  --border: 240 5% 20%;
+  --input: 240 5% 20%;
+  --ring: 275 100% 60%;
 
   /* Status Colors */
-  --success: 142 76% 36%;
-  --warning: 38 92% 50%;
-  --destructive: 0 84% 60%;
+  --success: 80 100% 40%;
+  --warning: 40 100% 50%;
+  --destructive: 0 100% 60%;
 
   /* Spacing & Layout */
-  --radius: 1rem;
+  --radius: 1.5rem;
   --header-height: 80px;
 }
 

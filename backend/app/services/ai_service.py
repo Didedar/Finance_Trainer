@@ -38,56 +38,58 @@ _gemini_model = None
 
 
 def _get_gemini_model():
-    """Lazily initialize and return the Gemini model singleton."""
-    global _gemini_model
-    if _gemini_model is None and settings.GEMINI_API_KEY:
-        try:
-            import google.generativeai as genai
-            genai.configure(api_key=settings.GEMINI_API_KEY)
-            _gemini_model = genai.GenerativeModel('gemini-2.5-flash')
-            logger.info("AI Service: Gemini model initialized")
-        except Exception as e:
-            logger.error(f"AI Service: Failed to init Gemini: {e}")
-    return _gemini_model
+    """Returns None - mock mode."""
+    return None
 
 
 def _call_gemini(prompt: str, system_instruction: str = None, max_retries: int = 3, timeout: int = 30) -> str:
     """
-    Call Gemini with retry logic.
-    Returns the response text or raises on exhausted retries.
+    Mock Gemini AI response for local hackathon rules compliance.
     """
-    model = _get_gemini_model()
-    if not model:
-        raise RuntimeError("Gemini model not available (no API key or init failed)")
-
-    last_error = None
-    for attempt in range(1, max_retries + 1):
-        try:
-            start = time.monotonic()
-
-            if system_instruction:
-                import google.generativeai as genai
-                chat_model = genai.GenerativeModel(
-                    'gemini-2.5-flash',
-                    system_instruction=system_instruction
-                )
-                response = chat_model.generate_content(prompt)
-            else:
-                response = model.generate_content(prompt)
-
-            elapsed = int((time.monotonic() - start) * 1000)
-            text = response.text.strip()
-            logger.debug(f"Gemini response (attempt {attempt}): {len(text)} chars, {elapsed}ms")
-            return text
-
-        except Exception as e:
-            last_error = e
-            wait = 2 ** attempt
-            logger.warning(f"Gemini attempt {attempt}/{max_retries} failed: {e}. Retrying in {wait}s...")
-            if attempt < max_retries:
-                time.sleep(wait)
-
-    raise RuntimeError(f"Gemini failed after {max_retries} attempts: {last_error}")
+    import json
+    
+    # Coach Chat
+    if system_instruction or "Coach:" in prompt:
+        return "Привет! Я твой встроенный ИИ-тренер (Mock). Я проанализировал твои знания и вот мой совет: всегда откладывай 10% от любого дохода. Как твои успехи сегодня?"
+        
+    # Dictionary
+    if "definition" in prompt or "lesson_context" in prompt or "dictionary" in prompt.lower():
+        data = {
+            "definition": "Это важный финансовый термин, помогающий вам сохранить капитал.",
+            "example": "Например: Если вы применяете это правило, вы не потеряете деньги.",
+            "mini_test": [
+                {
+                    "question": "Применимо ли это в жизни?",
+                    "options": ["Да", "Нет", "Иногда", "Сложно сказать"],
+                    "correct_index": 0
+                }
+            ]
+        }
+        return json.dumps(data, ensure_ascii=False)
+        
+    # Life example
+    if "example_text" in prompt or "income_type" in prompt:
+        data = {
+            "example_text": "Отличный пример: вы заработали деньги на фрилансе и отложили 20%.",
+            "explanation": "Так формируется финансовая подушка безопасности.",
+            "practice_questions": [
+                {
+                    "question": "Сколько лучше откладывать?",
+                    "options": ["Нисколько", "Всё", "10-20%", "50%"],
+                    "correct_index": 2,
+                    "explanation": "10-20% оптимально!"
+                }
+            ]
+        }
+        return json.dumps(data, ensure_ascii=False)
+        
+    # Regenerate Lesson
+    data = {
+        "lesson_text": "Этот урок был персонально сгенерирован нашим алгоритмом под ваши новые настройки!",
+        "flashcards": [{"question": "В чем суть?", "answer": "В дисциплине."}],
+        "quiz": [{"question": "Это помогает?", "options": ["Да", "Нет", "Не знаю", "Может быть"], "correct_index": 0, "explanation": "Конечно помогает."}]
+    }
+    return json.dumps(data, ensure_ascii=False)
 
 
 def _clean_json(text: str) -> str:

@@ -112,28 +112,13 @@ Use Markdown:
 
 class GeminiService:
     def __init__(self):
-        self.api_key = settings.GEMINI_API_KEY
+        self.api_key = None
         self.model = None
-        if self.api_key:
-            try:
-                import google.generativeai as genai
-                genai.configure(api_key=self.api_key)
-                self.model = genai.GenerativeModel('gemini-2.5-flash')
-                logger.info("Gemini API initialized successfully")
-            except Exception as e:
-                logger.warning(f"Failed to initialize Gemini API: {e}")
-                self.model = None
+        logger.info("Using local mock service instead of Gemini API (Hackathon rules)")
     
     def generate_content(self, lesson: Lesson) -> GeneratedContentSchema:
-        if self.model:
-            try:
-                return self._generate_with_gemini(lesson)
-            except Exception as e:
-                logger.error(f"Gemini generation failed: {e}")
-                return self._generate_mock_content(lesson)
-        else:
-            logger.info("Using mock content (no Gemini API key)")
-            return self._generate_mock_content(lesson)
+        logger.info("Generating mock content internally")
+        return self._generate_mock_content(lesson)
     
     def _clean_json_response(self, response_text: str) -> str:
         text = response_text.strip()

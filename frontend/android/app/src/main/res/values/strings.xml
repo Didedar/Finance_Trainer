@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CoinUp</string>
+    <string name="title_activity_main">CoinUp</string>
+    <string name="package_name">com.hackathon.coinup</string>
+    <string name="custom_url_scheme">com.hackathon.coinup</string>
+</resources>

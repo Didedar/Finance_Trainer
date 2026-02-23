@@ -27,7 +27,7 @@ export const AboutUs: React.FC = () => {
                     <div className="prose prose-lg mx-auto text-gray-600 leading-relaxed">
                         <p className="mb-6 text-lg">
                             We are not gurus and we don't sell crypto signals.
-                            <strong className="text-gray-900 font-semibold"> Finance Trainer</strong> — is an educational simulator
+                            <strong className="text-gray-900 font-semibold"> CoinUp</strong> — is an educational simulator
                             that will guide you step-by-step from a basic understanding of "how not to spend everything to zero"
                             to a deep understanding of investment strategies.
                         </p>

@@ -15,7 +15,7 @@ settings = get_settings()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Finance Trainer API",
+    title="CoinUp API",
     description="API for Financial Literacy Training Application",
     version="1.0.0"
 )
@@ -33,7 +33,7 @@ app.include_router(api_router, prefix="/api")
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "message": "Finance Trainer API is running"}
+    return {"status": "ok", "message": "CoinUp API is running"}
 
 
 @app.get("/health")
